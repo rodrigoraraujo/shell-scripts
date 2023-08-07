@@ -32,9 +32,9 @@ is_git_repo() {
 }
 
 git_prompt() {
-    git_status=$(git status --porcelain)
+    if is_git_repo; then
+        local git_status=$(git status --porcelain)
 
-    if is_git_repo; then	
         local new=$(echo $git_status        | grep '^??'    | wc -l)
         local modified=$(echo $git_status   | grep '^ M'    | wc -l) 
         local deleted=$(echo $git_status    | grep '^ D'    | wc -l)
