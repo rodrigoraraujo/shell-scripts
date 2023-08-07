@@ -27,47 +27,41 @@ function box_name {
   echo "${box:gs/%/%%}"
 }
 
-git_prompt_new() {
-     if [ -d $__git_repo_path ]; then	
-        new=$(git status --porcelain 2>/dev/null | grep '^??' | wc -l)
+is_git_repo() {
+    git rev-parse --is-inside-work-tree &>/dev/null
+}
+
+git_prompt() {
+    git_status=$(git status --porcelain)
+
+    if is_git_repo; then	
+        local new=$(echo $git_status        | grep '^??'    | wc -l)
+        local modified=$(echo $git_status   | grep '^ M'    | wc -l) 
+        local deleted=$(echo $git_status    | grep '^ D'    | wc -l)
+        local staged=$(echo $git_status     | grep '^[AMR]' | wc -l)
+        local prompt=''
         
         if [ "$new" -gt 0 ]; then
-            echo "+$new "
+            prompt="%{$FG[021]%}+$new "
         fi
-    fi
-}
 
-git_prompt_modified() {
-     if [ -d $__git_repo_path ]; then	
-        modified=$(git status --porcelain 2>/dev/null | grep '^ M' | wc -l) 
-        
         if [ "$modified" -gt 0 ]; then
-            echo "*$modified "
+            prompt+="%{$FG[208]%}*$modified "
         fi
-    fi
-}
-
-git_prompt_deleted() {
-     if [ -d $__git_repo_path ]; then	
-        deleted=$(git status --porcelain 2>/dev/null | grep '.*D' | wc -l)
         
         if [ "$deleted" -gt 0 ]; then
-            echo "-$deleted "
+            prompt+="%{$FG[196]%}-$deleted "
         fi
-    fi
-}
 
-git_prompt_staged() {
-     if [ -d $__git_repo_path ]; then	
-        staged=$(git status --porcelain 2>/dev/null | grep '^[AMR]' | wc -l)
-        
         if [ "$staged" -gt 0 ]; then
-            echo "~$staged "
+            prompt+="%{$FG[046]%}~$staged "
         fi
+
+        echo "$prompt%{$reset_color%}"            
     fi
 }
 
-PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}%~%{$reset_color%}\$(git_prompt_info) %{$FG[021]%}\$(git_prompt_new)%{$FG[208]%}\$(git_prompt_modified)%{$FG[196]%}\$(git_prompt_deleted)%{$FG[046]%}\$(git_prompt_staged)%{$reset_color%}\$(ruby_prompt_info)
+PROMPT="╭─%{$FG[040]%}%n%{$reset_color%} %{$FG[239]%}at%{$reset_color%} %{$FG[033]%}$(box_name)%{$reset_color%} %{$FG[239]%}in%{$reset_color%} %{$terminfo[bold]$FG[226]%}%~%{$reset_color%}\$(git_prompt_info) \$(git_prompt)\$(ruby_prompt_info)
 ╰─\$(virtualenv_info)\$(prompt_char) "
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$FG[239]%}on%{$reset_color%} %{$fg[255]%}"
