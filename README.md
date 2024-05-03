@@ -8,7 +8,7 @@
 
 ## Zsh
 
-1 - Install [Oh My Zsh][https://ohmyz.sh/#install]
+1 - Install [Oh My Zsh](https://ohmyz.sh/#install)
 
 2 - Download `fino-time.zsh-theme` and copy to:
   > ~/.oh-my-zsh/themes
