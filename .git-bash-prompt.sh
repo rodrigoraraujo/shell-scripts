@@ -67,4 +67,4 @@ git_prompt() {
     fi
 }
 
-PS1='\[\e[1m\e[32m\]\u@\h\[\e[0m\]:\[\e[1m\e[34m\]\w\[\e[0m\]$(git_branch)$(git_prompt) $ '
+PS1='\[\e[1m\e[32m\]\u@\h\[\e[0m\]:\[\e[1m\e[34m\]\w\[\e[0m\]$(git_branch)$(git_prompt)$ '
