@@ -22,4 +22,4 @@
 
 3- The prompt will change either after restarting the bash shell or executing the command
 ##
-        > `source ~/.zshrc`
+        `source ~/.zshrc`
